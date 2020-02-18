@@ -2,8 +2,17 @@ import random
 import time 
 import datetime
 
-Qucomparision = 0
-Quexchange = 0
+QuComparision = 0
+QuExchange = 0
+
+HeOneComparision = 0
+HeOneExchange = 0
+
+HeTwoComparision = 0
+HeTwoExchange = 0
+
+MeComparision = 0
+MeExchage = 0
 
 ########################################################################
 # Get an array whose elements are unordered integers
@@ -12,8 +21,8 @@ def RandomInitList(start, end, length):
     for i in range(length):
         randomList.append(random.randint(start, end))
     
-    #print("The automatically generated unordered array data is:")
-    print(randomList)
+    # print("The automatically generated unordered array data is:")
+    # print(randomList)
     
     return randomList
 
@@ -53,15 +62,15 @@ def SelectionSort(SeMatrix):
     #print(SeMatrix)
     print("Select comparision number:%d" % comparision)
     print("Select exchange number:%d" % exchange)
-    print("timeGap:%d" % timeGap)
+    print("timeGap:%dms" % timeGap)
 
     return SeMatrix
 
 ########################################################################
 # Quickly sorted method calls
 def QuickSortMathod(left, right, QuMatrix):
-    global Qucomparision
-    global Quexchange
+    global QuComparision
+    global QuExchange
     comparision = 0
     exchange = 0
     begin = left
@@ -71,12 +80,13 @@ def QuickSortMathod(left, right, QuMatrix):
         return
 
     while left != right:
-        Qucomparision = Qucomparision + 1
+        QuComparision = QuComparision + 1
         if QuMatrix[right] <= QuMatrix[begin]:
-            Qucomparision = Qucomparision + 1
+            QuComparision = QuComparision + 1
             if QuMatrix[left] > QuMatrix[begin]:
-                Qucomparision = Qucomparision + 1
-                Quexchange = Quexchange + 1
+                QuComparision = QuComparision + 1
+                QuExchange = QuExchange + 1
+
                 quickTemp = QuMatrix[left]
                 QuMatrix[left] = QuMatrix[right]
                 QuMatrix[right] = quickTemp
@@ -86,8 +96,9 @@ def QuickSortMathod(left, right, QuMatrix):
                 left = left + 1
         else:
             right = right - 1
+
+    QuExchange = QuExchange + 1
     
-    Quexchange = Quexchange + 1
     quickTemp = QuMatrix[begin]
     QuMatrix[begin] = QuMatrix[right]
     QuMatrix[right] = quickTemp
@@ -99,8 +110,8 @@ def QuickSortMathod(left, right, QuMatrix):
 def QuickSort(QuMatrix):
     timeStart = time.time()
 
-    global Qucomparision
-    global Quexchange
+    global QuComparision
+    global QuExchange
     QuickSortMathod(0, (len(QuMatrix) - 1), QuMatrix)
         
     timeEnd = time.time()
@@ -109,9 +120,9 @@ def QuickSort(QuMatrix):
     timeGap = timeEnd - timeStart
     #print("The result of quick sort is:")
     #print(QuMatrix)
-    print("Quick comparision number:%d" % Qucomparision)
-    print("Quick exchange number:%d" % Quexchange)
-    print("timeGap:%d" % timeGap)
+    print("Quick comparision number:%d" % QuComparision)
+    print("Quick exchange number:%d" % QuExchange)
+    print("timeGap:%dms" % timeGap)
 
     return QuMatrix
 
@@ -145,7 +156,7 @@ def InsertSort(InMatrix):
     #print(InMatrix)
     print("Insert comparision number:%d" % comparision)
     print("Insert exchange number:%d" % exchange)
-    print("timeGap:%d" % timeGap)
+    print("timeGap:%dms" % timeGap)
 
     return InMatrix
 
@@ -188,63 +199,264 @@ def ShellSort(ShMatrix):
     #print(ShMatrix)
     print("Shell comparision number:%d" % comparision)
     print("Shell exchange number:%d" % exchange)
-    print("timeGap:%d" % timeGap)
+    print("timeGap:%dms" % timeGap)
 
     return ShMatrix
 
 ########################################################################
 def BubbleSort(BuMatrix):
     timeStart = time.time()
-    
     comparision = 0
     exchange = 0
+
+    stopFlag = True
     exCnt = 0
     while exCnt < len(BuMatrix):
         inCnt = 0
         while (inCnt + 1) < (len(BuMatrix) - exCnt):
             if BuMatrix[inCnt] > BuMatrix[inCnt+1]:
+                stopFlag = False
                 exchange = exchange + 1
                 BuTemp = BuMatrix[inCnt+1]
                 BuMatrix[inCnt+1] = BuMatrix[inCnt]
                 BuMatrix[inCnt] = BuTemp
             inCnt= inCnt + 1
             comparision = comparision + 1
-
+        if (stopFlag == True) and (exCnt == 0):
+            break        
         exCnt = exCnt + 1
     
     timeEnd = time.time()
     timeStart = int(round(timeStart * 1000))
     timeEnd = int(round(timeEnd * 1000))
     timeGap = timeEnd - timeStart
-    print("The result of bubble sort is:")
+    #print("The result of bubble sort is:")
     print(BuMatrix)
-    print("Shell comparision number:%d" % comparision)
-    print("Shell exchange number:%d" % exchange)
-    print("timeGap:%d" % timeGap)
+    print("Bubble comparision number:%d" % comparision)
+    print("Bubble exchange number:%d" % exchange)
+    print("timeGap:%dms" % timeGap)
+
+########################################################################
+def HeapSortOne(HeMatrix):
+    timeStart = time.time()
+    global HeOneComparision
+    global HeOneExchange
+    constructionCnt = 0
+
+    while constructionCnt < len(HeMatrix):
+        # Get the first non-leaf node
+        begin = (int((len(HeMatrix)-constructionCnt) / 2) - 1)
+        HeMatrix = ConstructionHeap(HeMatrix, begin, constructionCnt)
+        # Each time a large top pile is constructed, the number of participating structures is reduced next time
+        constructionCnt = constructionCnt + 1
+        
+        HeMatrix = SwapValue(HeMatrix, 0, (len(HeMatrix) - constructionCnt))
+    
+    timeEnd = time.time()
+    timeStart = int(round(timeStart * 1000))
+    timeEnd = int(round(timeEnd * 1000))
+    timeGap = timeEnd - timeStart
+    #print("The result of heap sort is:")
+    #print(HeMatrix)
+    print("Heap comparision number:%d" % HeOneComparision)
+    print("Heap exchange number:%d" % HeOneExchange)
+    print("timeGap:%dms" % timeGap)
+    
+    return HeMatrix
+
+# Constructing a Big Top Binary Tree
+def ConstructionHeap(HeMatrix, begin, constructionCnt):
+    global HeOneComparision
+    global HeOneExchange
+    # Get the starting non-leaf node
+    noLeafNodeCnt = begin
+
+    while noLeafNodeCnt >= 0:
+        # Determine if there is a left child
+        if (noLeafNodeCnt * 2 + 2) < (len(HeMatrix) - constructionCnt):
+            if HeMatrix[noLeafNodeCnt*2+1] > HeMatrix[noLeafNodeCnt*2+2]:
+                HeMatrix = SwapMax(HeMatrix, noLeafNodeCnt, noLeafNodeCnt*2 + 1)
+            else:
+                HeMatrix = SwapMax(HeMatrix, noLeafNodeCnt, noLeafNodeCnt*2 + 2)
+        else:
+            # Compare directly with right child
+            HeMatrix = SwapMax(HeMatrix, noLeafNodeCnt, noLeafNodeCnt*2 + 1)
+        
+        HeOneComparision = HeOneComparision + 1
+        HeOneExchange = HeOneExchange + 1
+
+        noLeafNodeCnt = noLeafNodeCnt - 1
+
+    return HeMatrix
+
+def SwapMax(HeMatrix, large, small):
+    if HeMatrix[large] < HeMatrix[small]:
+        temp = HeMatrix[large]
+        HeMatrix[large] = HeMatrix[small]
+        HeMatrix[small] = temp
+    return HeMatrix
+
+def SwapValue(HeMatrix, left, right):
+    temp = HeMatrix[left]
+    HeMatrix[left] = HeMatrix[right]
+    HeMatrix[right] = temp
+
+    return HeMatrix
+
+########################################################################
+def HeapSortTwo(HeMatrix):
+    timeStart = time.time()
+    global HeTwoComparision
+    global HeOneExchange
+
+    sortCompleteCnt = 0
+
+    # Get the first non-leaf node
+    nodeNum = len(HeMatrix)-sortCompleteCnt
+    noLeafNodeCnt = (int(nodeNum / 2) - 1)
+
+    while noLeafNodeCnt >= 0:    
+        HeapSortTwoSwap(HeMatrix, noLeafNodeCnt, nodeNum)
+        noLeafNodeCnt = noLeafNodeCnt - 1
+
+    sortCompleteCnt = sortCompleteCnt + 1
+    SwapValue(HeMatrix, 0, (len(HeMatrix)-sortCompleteCnt))
+
+    while len(HeMatrix) > sortCompleteCnt:
+        nodeNum = len(HeMatrix)-sortCompleteCnt
+        HeapSortTwoSwap(HeMatrix, 0, nodeNum)
+        
+        sortCompleteCnt = sortCompleteCnt + 1
+        SwapValue(HeMatrix, 0, (len(HeMatrix)-sortCompleteCnt))
+        
+    timeEnd = time.time()
+    timeStart = int(round(timeStart * 1000))
+    timeEnd = int(round(timeEnd * 1000))
+    timeGap = timeEnd - timeStart
+    #print("The result of heap sort is:")
+    print(HeMatrix)
+    print("Heap two comparision number:%d" % HeTwoComparision)
+    print("Heap two exchange number:%d" % HeTwoExchange)
+    print("timeGap:%dms" % timeGap)
+    return 
+
+def HeapSortTwoSwap(HeMatrix, nodeValue, nodeNum):
+    global HeTwoComparision
+    global HeTwoExchange
+
+    leftChild = nodeValue * 2 + 1
+    rightChild = nodeValue * 2 + 2
+
+    # Determine if a node has children
+    if leftChild < nodeNum:
+        # Determine if a node has a right child
+        if rightChild < nodeNum:
+            # Take the older of the left and right children
+            if HeMatrix[leftChild] > HeMatrix[rightChild]:
+                HeMatrix = SwapMax(HeMatrix, nodeValue, leftChild)
+                HeapSortTwoSwap(HeMatrix, leftChild, nodeNum)
+            else:
+                HeMatrix = SwapMax(HeMatrix, nodeValue, rightChild)
+                HeapSortTwoSwap(HeMatrix, rightChild, nodeNum)
+        else:
+            # Compare directly with left child
+            HeMatrix = SwapMax(HeMatrix, nodeValue, leftChild)
+            HeapSortTwoSwap(HeMatrix, leftChild, nodeNum)
+        HeTwoComparision = HeTwoComparision + 1
+        HeTwoExchange = HeTwoExchange + 1
+    else:
+        return 
+
+########################################################################
+def MergeSort(MeMatrix):
+    global MeComparision 
+    global MeExchage
+    timeStart = time.time()
+
+    MergeSortMethod(MeMatrix, 0, (len(MeMatrix)-1))
+
+    timeEnd = time.time()
+    timeStart = int(round(timeStart * 1000))
+    timeEnd = int(round(timeEnd * 1000))
+    timeGap = timeEnd - timeStart
+    #print("The result of merge sort is:")
+    #print(MeMatrix)
+    print("Merge two comparision number:%d" % MeComparision)
+    print("Merge two exchange number:%d" % MeExchage)
+    print("timeGap:%dms" % timeGap)
+    
+
+def MergeSortMethod(MeMatix, start, end):
+    if start < end:
+        mid =  int((end+start)/2)
+        MergeSortMethod(MeMatix, start, mid)
+        MergeSortMethod(MeMatix, (mid+1), end)
+        Merge(MeMatix, start, mid, end)
+
+def Merge(MeMatrix, start, mid, end):
+    global MeComparision 
+    global MeExchage
+    CoMeMatrix = MeMatrix.copy()
+    midValue = mid
+    cnt = start
+
+    while start <= midValue and (mid+1) <= end:
+        if CoMeMatrix[start] < CoMeMatrix[mid+1]:
+            MeMatrix[cnt] = CoMeMatrix[start]
+            start = start + 1
+        else:
+            MeMatrix[cnt] = CoMeMatrix[mid+1]
+            mid = mid + 1
+        cnt = cnt + 1
+        MeComparision = MeComparision + 1
+        MeExchage = MeExchage + 1
+    
+    while start <= midValue:
+        MeMatrix[cnt] = CoMeMatrix[start]
+        start = start + 1
+        cnt = cnt + 1        
+        MeExchage = MeExchage + 1
+
+    while (mid+1) <= end:
+        MeMatrix[cnt] = CoMeMatrix[mid+1]
+        mid = mid + 1
+        MeExchage = MeExchage + 1
+        cnt = cnt + 1        
+    
+    return
 
 ########################################################################
 if __name__ == "__main__":
     Matrix = []
-    Matrix = RandomInitList(1, 200, 3)
+    Matrix = RandomInitList(1, 10000, 5000)
 
     SeMatrix = Matrix.copy()
     QuMatrix = Matrix.copy()
     InMatrix = Matrix.copy()
     ShMatrix = Matrix.copy()
     BuMatrix = Matrix.copy()
+    HeOneMatrix = Matrix.copy()
+    HeTwoMatrix = Matrix.copy()
+    MeMatrix = Matrix.copy()
     
     # Select Sort
     #SelectionSort(SeMatrix)
 
     # Quick Sort
-    #QuickSort(QuMatrix)
+    QuickSort(QuMatrix)
 
     # Insert Sort
     #InsertSort(InMatrix)
     
     # Shell Sort
-    #ShellSort(ShMatrix)
+    ShellSort(ShMatrix)
 
     # Bubble Sort
-    BubbleSort(BuMatrix)
+    #BubbleSort(BuMatrix)
+
+    # Heap Sort
+    #HeapSortOne(HeOneMatrix)
+    #HeapSortTwo(HeTwoMatrix)
+
+    MergeSort(MeMatrix)
 
