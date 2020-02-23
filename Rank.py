@@ -120,9 +120,9 @@ def QuickSort(QuMatrix):
     timeGap = timeEnd - timeStart
     #print("The result of quick sort is:")
     #print(QuMatrix)
-    print("Quick comparision number:%d" % QuComparision)
-    print("Quick exchange number:%d" % QuExchange)
-    print("timeGap:%dms" % timeGap)
+    # print("Quick comparision number:%d" % QuComparision)
+    # print("Quick exchange number:%d" % QuExchange)
+    print("Quick timeGap:%dms" % timeGap)
 
     return QuMatrix
 
@@ -425,8 +425,8 @@ def Merge(MeMatrix, start, mid, end):
     
     return
 
+########################################################################
 def CountSort(CoMatrix, max):
-    print(len(CoMatrix))
     CoComparision = 0
     CoExchage = 0
 
@@ -456,17 +456,51 @@ def CountSort(CoMatrix, max):
     print("CountSort comparision number:%d" % CoComparision)
     print("CountSort exchange number:%d" % CoExchage)
     print("CountSort timeGap:%dms" % timeGap)
+
+########################################################################
+def BucketSort(BucMatrix, min, max):
+    timeStart = time.time()
+
+    if min > max:
+        return
+
+    interval = int((max - min)/10) + 1
+    list = [[],[], [],[], [],[], [],[], [],[]]
+    for BuMaCnt in range (len(BucMatrix)):
+        listCnt = 0
+        while listCnt < 10:
+            if BucMatrix[BuMaCnt] > interval*listCnt and BucMatrix[BuMaCnt] <= interval*(listCnt+1):
+                list[listCnt].append(BucMatrix[BuMaCnt])
+                break
+            else:
+                listCnt = listCnt + 1
     
-    print(len(CoMatrix))
+    QuList = []
+    for listCnt in range(len(list)):
+        list[listCnt] = (QuickSort(list[listCnt]))
+        for cnt in range (len(list[listCnt])):
+            QuList.append(list[listCnt][cnt])
+    
+    timeEnd = time.time()
+    timeStart = int(round(timeStart * 1000))
+    timeEnd = int(round(timeEnd * 1000))
+    timeGap = timeEnd - timeStart
+
+    print("Bucket Sort timeGap:%dms" % timeGap)
+
+    # print(BucMatrix)
+    # print(QuList) 
 
 
+
+    return 
 
 ########################################################################
 if __name__ == "__main__":
     Matrix = []
     min = 1
-    max = 50000
-    number = 20000
+    max = 500000
+    number = 300000
     Matrix = RandomInitList(min, max, number)
 
     SeMatrix = Matrix.copy()
@@ -478,6 +512,7 @@ if __name__ == "__main__":
     HeTwoMatrix = Matrix.copy()
     MeMatrix = Matrix.copy()
     CoMatrix = Matrix.copy()
+    BucMatrix = Matrix.copy()
     
     # Select Sort
     #SelectionSort(SeMatrix)
@@ -489,7 +524,7 @@ if __name__ == "__main__":
     #InsertSort(InMatrix)
     
     # Shell Sort
-    ShellSort(ShMatrix)
+    # ShellSort(ShMatrix)
 
     # Bubble Sort
     #BubbleSort(BuMatrix)
@@ -499,7 +534,10 @@ if __name__ == "__main__":
     #HeapSortTwo(HeTwoMatrix)
 
     # Merge Sort
-    MergeSort(MeMatrix)
+    #MergeSort(MeMatrix)
 
     # Count Sort
     CountSort(CoMatrix, max)
+
+    # Bucket Sort
+    BucketSort(BucMatrix, min, max)
