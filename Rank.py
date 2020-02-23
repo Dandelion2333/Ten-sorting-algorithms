@@ -425,10 +425,49 @@ def Merge(MeMatrix, start, mid, end):
     
     return
 
+def CountSort(CoMatrix, max):
+    print(len(CoMatrix))
+    CoComparision = 0
+    CoExchage = 0
+
+    timeStart = time.time()
+    list = [0]*(max+1)
+
+    for cnt in range (len(CoMatrix)):
+        CoExchage = CoExchage + 1
+        list[CoMatrix[cnt]] = list[CoMatrix[cnt]] + 1
+
+    CoMatrix = []
+
+    for cnt in range(len(list)):
+        CoComparision = CoComparision + 1
+        if list[cnt] != 0:
+            for count in range(list[cnt]):
+                CoExchage = CoExchage + 1
+                CoMatrix.append(cnt)
+                count = count + 1
+    
+    timeEnd = time.time()
+    timeStart = int(round(timeStart * 1000))
+    timeEnd = int(round(timeEnd * 1000))
+    timeGap = timeEnd - timeStart
+    # print("The result of count sort is:")
+    # print(CoMatrix)
+    print("CountSort comparision number:%d" % CoComparision)
+    print("CountSort exchange number:%d" % CoExchage)
+    print("CountSort timeGap:%dms" % timeGap)
+    
+    print(len(CoMatrix))
+
+
+
 ########################################################################
 if __name__ == "__main__":
     Matrix = []
-    Matrix = RandomInitList(1, 10000, 5000)
+    min = 1
+    max = 50000
+    number = 20000
+    Matrix = RandomInitList(min, max, number)
 
     SeMatrix = Matrix.copy()
     QuMatrix = Matrix.copy()
@@ -438,6 +477,7 @@ if __name__ == "__main__":
     HeOneMatrix = Matrix.copy()
     HeTwoMatrix = Matrix.copy()
     MeMatrix = Matrix.copy()
+    CoMatrix = Matrix.copy()
     
     # Select Sort
     #SelectionSort(SeMatrix)
@@ -458,5 +498,8 @@ if __name__ == "__main__":
     #HeapSortOne(HeOneMatrix)
     #HeapSortTwo(HeTwoMatrix)
 
+    # Merge Sort
     MergeSort(MeMatrix)
 
+    # Count Sort
+    CountSort(CoMatrix, max)
