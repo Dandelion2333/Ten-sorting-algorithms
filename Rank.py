@@ -14,6 +14,30 @@ HeTwoExchange = 0
 MeComparision = 0
 MeExchage = 0
 
+#######################################################################
+def GetMinValue(Matrix):
+    if len(Matrix) == 0:
+        return
+
+    minValue = Matrix[0]
+
+    for cnt in range (len(Matrix)):
+        if minValue > Matrix[cnt]:
+            minValue = Matrix[cnt]
+
+    return minValue
+
+def GetMaxValue(Matrix):
+    if len(Matrix) == 0:
+        return
+
+    maxValue = Matrix[0]
+    for cnt in range (len(Matrix)):
+        if maxValue < Matrix[cnt]:
+            maxValue = Matrix[cnt]
+
+    return maxValue
+
 ########################################################################
 # Get an array whose elements are unordered integers
 def RandomInitList(start, end, length):
@@ -426,12 +450,14 @@ def Merge(MeMatrix, start, mid, end):
     return
 
 ########################################################################
-def CountSort(CoMatrix, max):
+def CountSort(CoMatrix):
     CoComparision = 0
     CoExchage = 0
 
+    maxValue = GetMaxValue(CoMatrix)
+
     timeStart = time.time()
-    list = [0]*(max+1)
+    list = [0]*(maxValue+1)
 
     for cnt in range (len(CoMatrix)):
         CoExchage = CoExchage + 1
@@ -458,11 +484,11 @@ def CountSort(CoMatrix, max):
     print("CountSort timeGap:%dms" % timeGap)
 
 ########################################################################
-def BucketSort(BucMatrix, min, max):
+def BucketSort(BucMatrix):
     timeStart = time.time()
 
-    if min > max:
-        return
+    max = GetMaxValue(BucMatrix)
+    min = GetMinValue(BucMatrix)
 
     interval = int((max - min)/10) + 1
     list = [[],[], [],[], [],[], [],[], [],[]]
@@ -491,16 +517,50 @@ def BucketSort(BucMatrix, min, max):
     # print(BucMatrix)
     # print(QuList) 
 
+    return QuList
 
+########################################################################
+def RadixSort(RaMatrix):
+    timeStart = time.time()
+    maxValue = GetMaxValue(RaMatrix)
 
-    return 
+    list = [[],[], [],[], [],[], [],[], [],[]]
+
+    divisor = 1
+    while divisor < maxValue:
+        for RaMaCnt in range (len(RaMatrix)):
+            value = (int(RaMatrix[RaMaCnt]/divisor))%10
+            bucketCnt = 0
+            while bucketCnt < 10:
+                if value == bucketCnt:
+                    list[bucketCnt].append(RaMatrix[RaMaCnt])
+                    break
+                else:
+                    bucketCnt = bucketCnt + 1
+        
+        RaMatrix = []
+        for bucketCnt in range (len(list)):
+            for listCnt in range (len(list[bucketCnt])):
+                RaMatrix.append(list[bucketCnt][listCnt])
+            
+        divisor = divisor*10
+        list = [[],[], [],[], [],[], [],[], [],[]]
+
+    timeEnd = time.time()
+    timeStart = int(round(timeStart * 1000))
+    timeEnd = int(round(timeEnd * 1000))
+    timeGap = timeEnd - timeStart
+
+    print("Radix Sort timeGap:%dms" % timeGap)
+
+    return RaMatrix
 
 ########################################################################
 if __name__ == "__main__":
     Matrix = []
     min = 1
-    max = 500000
-    number = 300000
+    max = 99000
+    number = 20000
     Matrix = RandomInitList(min, max, number)
 
     SeMatrix = Matrix.copy()
@@ -513,6 +573,7 @@ if __name__ == "__main__":
     MeMatrix = Matrix.copy()
     CoMatrix = Matrix.copy()
     BucMatrix = Matrix.copy()
+    RaMatrix = Matrix.copy()
     
     # Select Sort
     #SelectionSort(SeMatrix)
@@ -537,7 +598,10 @@ if __name__ == "__main__":
     #MergeSort(MeMatrix)
 
     # Count Sort
-    CountSort(CoMatrix, max)
+    CountSort(CoMatrix)
 
     # Bucket Sort
-    BucketSort(BucMatrix, min, max)
+    BucketSort(BucMatrix)
+
+    # Radix Sort
+    RadixSort(RaMatrix)
