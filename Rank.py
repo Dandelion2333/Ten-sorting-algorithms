@@ -527,7 +527,7 @@ def RadixSort(RaMatrix):
     list = [[],[], [],[], [],[], [],[], [],[]]
 
     divisor = 1
-    while divisor < maxValue:
+    while divisor <= maxValue:
         for RaMaCnt in range (len(RaMatrix)):
             value = (int(RaMatrix[RaMaCnt]/divisor))%10
             bucketCnt = 0
