@@ -52,49 +52,96 @@ def RandomInitList(start, end, length):
 
 ########################################################################
 # Choose a sorting method
-def SelectionSort(SeMatrix):
+def SelectionSortSmallToBig(SeMatrixSmallToBig):
     timeStart = time.time()
     comparision = 0
     exchange = 0
-    exNum = 0
-    inNum = 0
+    leftCnt = 0
+    rightCnt = 0
 
-    while exNum < len(SeMatrix):
-        minValue = SeMatrix[exNum]
-        inNum = exNum
+    # 外层循环控制相对最小值，然后依次由小向大推进
+    while leftCnt < len(SeMatrix):
+        minValue = SeMatrix[leftCnt]
+        rightCnt = leftCnt
 
-        while inNum < len(SeMatrix):
-            if minValue > SeMatrix[inNum]:
+        # 内层循环负责寻找本次循环的最小值
+        while rightCnt < len(SeMatrix):
+            if minValue >= SeMatrix[rightCnt]:
                 comparision = comparision + 1
                 exchange = exchange + 1
+                # 找到相对较小的值，然后交换
                 minTemp = minValue
-                minValue = SeMatrix[inNum]
-                SeMatrix[inNum] = minTemp
-            inNum = inNum + 1
+                minValue = SeMatrix[rightCnt]
+                SeMatrix[rightCnt] = minTemp
+            rightCnt = rightCnt + 1
 
     
         exchange = exchange + 1
-        SeMatrix[exNum] = minValue
-        exNum = exNum + 1
+        SeMatrix[leftCnt] = minValue
+        leftCnt = leftCnt + 1
 
     timeEnd = time.time()
     timeStart = int(round(timeStart * 1000))
     timeEnd = int(round(timeEnd * 1000))
     timeGap = timeEnd - timeStart
 
-    #print("The result of selecting sort is:")
-    #print(SeMatrix)
+    print("The result of selecting sort is:")
+    print(SeMatrix)
     print("Select comparision number:%d" % comparision)
     print("Select exchange number:%d" % exchange)
     print("timeGap:%dms" % timeGap)
 
     return SeMatrix
 
+# 选择排序的从小到大版本
+def SelectionSortBigToSamll(SeMatrixBigToSmall):
+    timeStart = time.time()
+    comparision = 0
+    exchange = 0
+    leftCnt = 0
+    rightCnt = 0
+
+    # 外层循环控制相对最大值，然后依次由大向小推进
+    while leftCnt < len(SeMatrixBigToSmall):
+        maxValue = SeMatrixBigToSmall[leftCnt]
+        rightCnt = leftCnt
+
+        # 内层循环负责寻找本次循环的最大值
+        while rightCnt < len(SeMatrixBigToSmall):
+            if maxValue <= SeMatrixBigToSmall[rightCnt]:
+                comparision = comparision + 1
+                exchange = exchange + 1
+                # 找到相对较大的值，然后交换
+                maxTemp = maxValue
+                maxValue = SeMatrixBigToSmall[rightCnt]
+                SeMatrixBigToSmall[rightCnt] = maxTemp
+            rightCnt = rightCnt + 1
+
+    
+        exchange = exchange + 1
+        SeMatrixBigToSmall[leftCnt] = maxValue
+        leftCnt = leftCnt + 1
+
+    timeEnd = time.time()
+    timeStart = int(round(timeStart * 1000))
+    timeEnd = int(round(timeEnd * 1000))
+    timeGap = timeEnd - timeStart
+
+    print("The result of selecting sort is:")
+    print(SeMatrixBigToSmall)
+    print("Select comparision number:%d" % comparision)
+    print("Select exchange number:%d" % exchange)
+    print("timeGap:%dms" % timeGap)
+
+    return SeMatrixBigToSmall
+
 ########################################################################
 # Quickly sorted method calls
-def QuickSortMathod(left, right, QuMatrix):
+# 由小到大排序
+def QuickSortMathodSmallToBig(left, right, QuMatrixSmallToBig):
     global QuComparision
     global QuExchange
+
     comparision = 0
     exchange = 0
     begin = left
@@ -105,15 +152,15 @@ def QuickSortMathod(left, right, QuMatrix):
 
     while left != right:
         QuComparision = QuComparision + 1
-        if QuMatrix[right] <= QuMatrix[begin]:
+        if QuMatrixSmallToBig[right] <= QuMatrixSmallToBig[begin]:
             QuComparision = QuComparision + 1
-            if QuMatrix[left] > QuMatrix[begin]:
+            if QuMatrixSmallToBig[left] > QuMatrixSmallToBig[begin]:
                 QuComparision = QuComparision + 1
                 QuExchange = QuExchange + 1
 
-                quickTemp = QuMatrix[left]
-                QuMatrix[left] = QuMatrix[right]
-                QuMatrix[right] = quickTemp
+                quickTemp = QuMatrixSmallToBig[left]
+                QuMatrixSmallToBig[left] = QuMatrixSmallToBig[right]
+                QuMatrixSmallToBig[right] = quickTemp
 
                 right = right - 1
             else:
@@ -123,32 +170,106 @@ def QuickSortMathod(left, right, QuMatrix):
 
     QuExchange = QuExchange + 1
     
-    quickTemp = QuMatrix[begin]
-    QuMatrix[begin] = QuMatrix[right]
-    QuMatrix[right] = quickTemp
+    quickTemp = QuMatrixSmallToBig[begin]
+    QuMatrixSmallToBig[begin] = QuMatrixSmallToBig[right]
+    QuMatrixSmallToBig[right] = quickTemp
 
-    QuickSortMathod(begin, (left - 1), QuMatrix)
-    QuickSortMathod((right + 1), end, QuMatrix)
+    # 使用递归的方式调用自己，控制最大值与最小值的输入即可
+    QuickSortMathodSmallToBig(begin, (left - 1), QuMatrixSmallToBig)
+    QuickSortMathodSmallToBig((right + 1), end, QuMatrixSmallToBig)
 
 # Quickly sorted method
-def QuickSort(QuMatrix):
+def QuickSortSmallToBig(QuMatrixSmallToBig):
     timeStart = time.time()
 
     global QuComparision
     global QuExchange
-    QuickSortMathod(0, (len(QuMatrix) - 1), QuMatrix)
+
+    # 使用递归的方式对当前数组进行排序
+    QuickSortMathodSmallToBig(0, (len(QuMatrixSmallToBig) - 1), QuMatrixSmallToBig)
         
     timeEnd = time.time()
     timeStart = int(round(timeStart * 1000))
     timeEnd = int(round(timeEnd * 1000))
     timeGap = timeEnd - timeStart
-    #print("The result of quick sort is:")
-    #print(QuMatrix)
-    # print("Quick comparision number:%d" % QuComparision)
-    # print("Quick exchange number:%d" % QuExchange)
+
+    print("The result of quick sort is:")
+    print(QuMatrixSmallToBig)
+    print("Quick comparision number:%d" % QuComparision)
+    print("Quick exchange number:%d" % QuExchange)
     print("Quick timeGap:%dms" % timeGap)
 
-    return QuMatrix
+    return QuMatrixSmallToBig
+
+# 由大到小排序
+def QuickSortMathodBigToSmall(left, right, QuMatrixBigToSmall):
+    global QuComparision
+    global QuExchange
+
+    comparision = 0
+    exchange = 0
+    begin = left
+    end = right
+
+    if left > right:
+        return
+
+
+    while left != right:
+        QuComparision = QuComparision + 1
+
+        # 必须从右边的计数器开始，与当前数组的首个元素进行比较
+        if QuMatrixBigToSmall[right] >= QuMatrixBigToSmall[begin]:
+            QuComparision = QuComparision + 1
+
+            # 从左边找到一个比当前数据首个元素小的数，目的是与右边的值进行交换
+            if QuMatrixBigToSmall[left] < QuMatrixBigToSmall[begin]:
+                QuComparision = QuComparision + 1
+                QuExchange = QuExchange + 1
+
+                # 调整两个数据的位置
+                quickTemp = QuMatrixBigToSmall[left]
+                QuMatrixBigToSmall[left] = QuMatrixBigToSmall[right]
+                QuMatrixBigToSmall[right] = quickTemp
+
+                right = right - 1
+            else:
+                left = left + 1
+        else:
+            right = right - 1
+
+    QuExchange = QuExchange + 1
+    
+    quickTemp = QuMatrixBigToSmall[begin]
+    QuMatrixBigToSmall[begin] = QuMatrixBigToSmall[right]
+    QuMatrixBigToSmall[right] = quickTemp
+
+    # 使用递归的方式调用自己，控制最大值与最小值的输入即可
+    QuickSortMathodBigToSmall(begin, (left - 1), QuMatrixBigToSmall)
+    QuickSortMathodBigToSmall((right + 1), end, QuMatrixBigToSmall)
+
+# Quickly sorted method
+def QuickSortBigToSmall(QuMatrixBigToSmall):
+    timeStart = time.time()
+
+    global QuComparision
+    global QuExchange
+
+    # 使用递归的方式对当前数组进行排序
+    QuickSortMathodBigToSmall(0, (len(QuMatrixBigToSmall) - 1), QuMatrixBigToSmall)
+        
+    timeEnd = time.time()
+    timeStart = int(round(timeStart * 1000))
+    timeEnd = int(round(timeEnd * 1000))
+    timeGap = timeEnd - timeStart
+
+    print("The result of quick sort is:")
+    print(QuMatrixBigToSmall)
+    print("Quick comparision number:%d" % QuComparision)
+    print("Quick exchange number:%d" % QuExchange)
+    print("Quick timeGap:%dms" % timeGap)
+
+    return QuMatrixBigToSmall
 
 ########################################################################
 def InsertSort(InMatrix):
@@ -558,13 +679,17 @@ def RadixSort(RaMatrix):
 ########################################################################
 if __name__ == "__main__":
     Matrix = []
-    min = 1
-    max = 99000
-    number = 20000
+    min = -90
+    max = 99
+    number = 16
     Matrix = RandomInitList(min, max, number)
 
-    SeMatrix = Matrix.copy()
-    QuMatrix = Matrix.copy()
+    SeMatrixSmallToBig = Matrix.copy()
+    SeMatrixBigToSmall = Matrix.copy()
+    
+    QuMatrixSmallToBig = Matrix.copy()
+    QuMatrixBigToSmall = Matrix.copy()
+
     InMatrix = Matrix.copy()
     ShMatrix = Matrix.copy()
     BuMatrix = Matrix.copy()
@@ -576,10 +701,12 @@ if __name__ == "__main__":
     RaMatrix = Matrix.copy()
     
     # Select Sort
-    #SelectionSort(SeMatrix)
+    # SelectionSortSmallToBig(SeMatrix)
+    # SelectionSortBigToSamll(SeMatrixBigToSmall)
 
     # Quick Sort
-    QuickSort(QuMatrix)
+    # QuickSortSmallToBig(QuMatrixSmallToBig)
+    # QuickSortBigToSmall(QuMatrixBigToSmall)
 
     # Insert Sort
     #InsertSort(InMatrix)
@@ -598,10 +725,10 @@ if __name__ == "__main__":
     #MergeSort(MeMatrix)
 
     # Count Sort
-    CountSort(CoMatrix)
+    # CountSort(CoMatrix)
 
     # Bucket Sort
-    BucketSort(BucMatrix)
+    # BucketSort(BucMatrix)
 
     # Radix Sort
-    RadixSort(RaMatrix)
+    # RadixSort(RaMatrix)
