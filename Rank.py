@@ -272,7 +272,42 @@ def QuickSortBigToSmall(QuMatrixBigToSmall):
     return QuMatrixBigToSmall
 
 ########################################################################
-def InsertSort(InMatrix):
+# 插入排序，使之从小到大排序
+def InsertSortSmallToBig(InMatrix):
+    timeStart = time.time()
+    comparision = 0
+    exchange = 0
+    rightCnt = 1
+    while rightCnt < len(InMatrix):
+        comparision = comparision + 1
+        if InMatrix[rightCnt] < InMatrix[rightCnt-1]:
+            comparision = comparision + 1
+            insertValue = InMatrix[rightCnt]
+            leftCnt = rightCnt - 1
+            while leftCnt > -1 and insertValue < InMatrix[leftCnt]:
+                comparision = comparision + 1
+                exchange = exchange + 1
+                InMatrix[leftCnt+1] = InMatrix[leftCnt] 
+                leftCnt = leftCnt - 1
+            exchange = exchange + 1
+            InMatrix[leftCnt+1] = insertValue
+
+        rightCnt = rightCnt + 1
+    
+    timeEnd = time.time()
+    timeStart = int(round(timeStart * 1000))
+    timeEnd = int(round(timeEnd * 1000))
+    timeGap = timeEnd - timeStart
+    #print("The result of insert sort is:")
+    #print(InMatrix)
+    print("Insert comparision number:%d" % comparision)
+    print("Insert exchange number:%d" % exchange)
+    print("timeGap:%dms" % timeGap)
+
+    return InMatrix
+
+# 插入排序，使之从大到小排序
+def InsertSortSmallToBig(InMatrix):
     timeStart = time.time()
     comparision = 0
     exchange = 0
@@ -679,10 +714,12 @@ def RadixSort(RaMatrix):
 ########################################################################
 if __name__ == "__main__":
     Matrix = []
-    min = -90
-    max = 99
-    number = 16
+    min = -90000
+    max = 99000
+    number = 160000
     Matrix = RandomInitList(min, max, number)
+
+    #print(Matrix)
 
     SeMatrixSmallToBig = Matrix.copy()
     SeMatrixBigToSmall = Matrix.copy()
@@ -690,7 +727,9 @@ if __name__ == "__main__":
     QuMatrixSmallToBig = Matrix.copy()
     QuMatrixBigToSmall = Matrix.copy()
 
-    InMatrix = Matrix.copy()
+    InMatrixSmallToBig = Matrix.copy()
+    InMatrixBigToSmall = Matrix.copy()
+
     ShMatrix = Matrix.copy()
     BuMatrix = Matrix.copy()
     HeOneMatrix = Matrix.copy()
@@ -705,11 +744,12 @@ if __name__ == "__main__":
     # SelectionSortBigToSamll(SeMatrixBigToSmall)
 
     # Quick Sort
-    # QuickSortSmallToBig(QuMatrixSmallToBig)
+    QuickSortSmallToBig(QuMatrixSmallToBig)
     # QuickSortBigToSmall(QuMatrixBigToSmall)
 
     # Insert Sort
-    #InsertSort(InMatrix)
+    # InsertSortSmallToBig(InMatrixSmallToBig)
+    # InsertSortBigToSmall(InMatrixBigToSmall)
     
     # Shell Sort
     # ShellSort(ShMatrix)
